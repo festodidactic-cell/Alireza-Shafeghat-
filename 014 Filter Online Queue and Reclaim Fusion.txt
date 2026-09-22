@@ -1,0 +1,844 @@
+درست فهمیدم؟ فیلتر جدید تو اینه؟ RRE را به عنوان فیلتر آنلاین اصلیِ مقاوم و باکیفیت نگه می‌داریم و QBR را به عنوان شکارچی تهاجمی کنار آن قرار می‌دهیم.
+
+منظورت ترکیب 2 فیلتر هست؟ یا من اشتباه فهمیدم. اگر درست فهمیدم فیلتر جدید رو با نام جدید و با مسما بساز تا من قاطی نکنم با قبلیها. باشه؟ البته اگر منظورت این بود فیلتر جدیدی نیست و من اشتباه فهمیدم بگو نیازی نیست. وقتی فیلتر را نوشتی و تشریح کردی برای درج در بایگانی با من برای ادامه مسیر سخن بگو. ببین من یک سری ایده ها خودم دارم که در ادامه مسیر با تو در میون میزارم. ولی تا اینجای صحبتهایمان اگر ایده جدیدی چیزی داری همینجا مطرح کن تا مسیر را با ایده تو ادامه بدهیم. مثلا تا اینجا چند فیلتر ساختیم باهم چه آنلاین و چه آفلاین حالا تو بگو اگر بریم سراغ فلان ایده بهتر است. البته ببین حتما لازم نیست به زور پیشنهاد بدی چون همین فیلترهای بالا هم متعدد است و اگر ایده ای که خیلی ارزش افزوده ندارد به مبحث اضافه کنی فقط میز کار ما را شلوغ میکند. قاطع باش. مثلا بگو همین بالایی ها را فعلا امتحان کن و بازخورد بگیر. مگر اینکه یک چیز عجیب و بی نظیر اصطلاحا برگ برنده ای در استین داشته باشی. خب 
+
+---------------------
+
+بله، **درست فهمیدی**. منظور من دقیقاً این بود که RRE و QBR را به‌صورت یک **موتور ترکیبی** کنار هم قرار دهیم؛ اما نه با این معنی که کد RRE و کد QBR را کورکورانه پشت سر هم بچسبانیم.
+
+منظورم این معماری بود:
+
+* **RRE** = آیا سهم از نظر ساختاری، نقدشوندگی، تاب‌آوری و کیفیت معاملات مناسب است؟
+* **QBR** = آیا همین الان یک حرکت تهاجمی و قابل‌استفاده در حال شکل‌گیری است؟
+* **موتور جدید** = آیا هر دو دسته شواهد هم‌زمان یکدیگر را تأیید می‌کنند؟
+
+بنابراین بله، **این یک فیلتر جدید است** و برای اینکه با RRE و QBR اشتباه نشود، نام مستقل برایش می‌گذارم:
+
+# فیلتر شماره ۱۱
+
+# **CFS — Confluence Fusion Scanner**
+
+### اسکنر همگرایی هوشمند
+
+اما یک نکته مهم: این نسخه را «فقط RRE AND QBR» نمی‌کنم. چون اگر تمام شروط هر دو فیلتر را با `AND` ترکیب کنیم، احتمالاً بیش از حد سخت‌گیر می‌شود و بخش زیادی از فرصت‌های خوب حذف خواهند شد.
+
+CFS باید **همگرایی شواهد** را بسنجد، نه صرفاً هم‌زمانی شروط.
+
+---
+
+## کد CFS
+
+> نکته: چون فایل مرجع، فیلدهای بنیادی مثل P/E و EPS را در بخش متغیرهای قابل استفاده مستند نکرده، در این موتور ادعای بنیادی اضافه نمی‌کنم. این نسخه بر داده‌هایی بنا شده که در فایل واقعاً مستند شده‌اند.
+
+```javascript
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+true==function()
+{
+    // ============================================================
+    // CFS
+    // CONFLUENCE FUSION SCANNER
+    //
+    // Filter 11
+    //
+    // ترکیب هوشمند:
+    // RRE = Structural / Resilience Engine
+    // QBR = Aggressive / Live Reclaim Engine
+    //
+    // هدف:
+    // پیدا کردن موقعیت‌هایی که:
+    // 1) سهم از نظر ساختاری و معاملاتی سالم است
+    // 2) نقدشوندگی مناسبی دارد
+    // 3) قدرت خریدار حقیقی مناسب است
+    // 4) جریان حقیقی مناسب است
+    // 5) قیمت در موقعیت مناسب روز قرار دارد
+    // 6) دفتر سفارش علیه سهم نیست
+    // 7) معاملات جاری نسبت به سابقه فعال شده
+    // 8) نشانه های بازپس گیری قیمت دیده می شود
+    //
+    // CFS به جای AND کردن کورکورانه RRE و QBR،
+    // از سیستم امتیازدهی و چند Gate حیاتی استفاده می کند.
+    // ============================================================
+
+
+    // ------------------------------------------------------------
+    // 1. DATA VALIDATION
+    // ------------------------------------------------------------
+
+    if(typeof [ih]=="undefined")
+        return false;
+
+    if([ih].length<15)
+        return false;
+
+    if(pl<=0 || pc<=0 || py<=0)
+        return false;
+
+    if(tvol<=0 || tno<=0 || tval<=0)
+        return false;
+
+    if(tmin<=0 || tmax<=tmin)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 2. LIQUIDITY / QUALITY GATE
+    // ------------------------------------------------------------
+
+    if([is1]<=0 || [is5]<=0 || [is9]<=0 || [is40]<=0)
+        return false;
+
+    if([is40]<70)
+        return false;
+
+    if([is1]<100000000)
+        return false;
+
+    if([is5]<10000)
+        return false;
+
+    if([is9]<30)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 3. CURRENT DAY STRUCTURE
+    // ------------------------------------------------------------
+
+    var range=tmax-tmin;
+
+    if(range<=0)
+        return false;
+
+    var dayPosition=
+        (pl-tmin)/range;
+
+    var highDistance=
+        (tmax-pl)/range;
+
+
+    // CFS باید در بخش نسبتاً قوی روز باشد
+    if(dayPosition<0.65)
+        return false;
+
+    // نباید بیش از حد از سقف فاصله داشته باشد
+    if(highDistance>0.35)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 4. CURRENT PRICE CONFIRMATION
+    // ------------------------------------------------------------
+
+    if(pl<pc)
+        return false;
+
+    if(pl<py)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 5. REAL BUYER POWER
+    // ------------------------------------------------------------
+
+    var buyI=(ct).Buy_I_Volume;
+    var sellI=(ct).Sell_I_Volume;
+
+    var buyC=(ct).Buy_CountI;
+    var sellC=(ct).Sell_CountI;
+
+
+    if(buyI<=0 || sellI<=0)
+        return false;
+
+    if(buyC<=0 || sellC<=0)
+        return false;
+
+
+    var avgBuy=buyI/buyC;
+    var avgSell=sellI/sellC;
+
+    if(avgBuy<=0 || avgSell<=0)
+        return false;
+
+
+    var buyerPower=
+        avgBuy/avgSell;
+
+
+    // حداقل قدرت خریدار
+    if(buyerPower<1.55)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 6. REAL MONEY FLOW
+    // ------------------------------------------------------------
+
+    var netReal=
+        buyI-sellI;
+
+    var realFlowRatio=
+        netReal/(buyI+sellI);
+
+
+    if(realFlowRatio<-0.02)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 7. ORDER BOOK
+    // ------------------------------------------------------------
+
+    var bid=
+        qd1+qd2+qd3;
+
+    var ask=
+        qo1+qo2+qo3;
+
+
+    if(bid<=0 || ask<=0)
+        return false;
+
+
+    var bookRatio=
+        bid/ask;
+
+
+    if(bookRatio<0.45)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 8. CURRENT ACTIVITY VS 15-DAY HISTORY
+    // ------------------------------------------------------------
+
+    var avgVol=0;
+    var avgTran=0;
+    var cnt=0;
+
+
+    for(var i=0;i<15;i++)
+    {
+        if(typeof [ih][i]!="undefined")
+        {
+            if([ih][i].QTotTran5J>0 &&
+               [ih][i].ZTotTran>0)
+            {
+                avgVol += [ih][i].QTotTran5J;
+                avgTran += [ih][i].ZTotTran;
+                cnt++;
+            }
+        }
+    }
+
+
+    if(cnt<12)
+        return false;
+
+
+    avgVol=avgVol/cnt;
+    avgTran=avgTran/cnt;
+
+
+    if(avgVol<=0 || avgTran<=0)
+        return false;
+
+
+    var volumeRatio=
+        tvol/avgVol;
+
+    var transactionRatio=
+        tno/avgTran;
+
+
+    if(volumeRatio<0.30)
+        return false;
+
+    if(transactionRatio<0.30)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 9. FIVE-DAY RESILIENCE
+    // ------------------------------------------------------------
+
+    var positive5=0;
+    var strongClose5=0;
+    var valid5=0;
+
+
+    for(var j=0;j<5;j++)
+    {
+        if(typeof [ih][j]!="undefined")
+        {
+            var d=[ih][j];
+
+            if(d.PClosing>0 &&
+               d.PriceYesterday>0 &&
+               d.PriceMax>d.PriceMin)
+            {
+                valid5++;
+
+                if(d.PClosing>=d.PriceYesterday)
+                    positive5++;
+
+                var cp=
+                    (d.PClosing-d.PriceMin)/
+                    (d.PriceMax-d.PriceMin);
+
+                if(cp>=0.55)
+                    strongClose5++;
+            }
+        }
+    }
+
+
+    if(valid5<5)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 10. TEN-DAY STRUCTURE
+    // ------------------------------------------------------------
+
+    var positive10=0;
+    var valid10=0;
+
+
+    for(var k=0;k<9;k++)
+    {
+        if(typeof [ih][k]!="undefined" &&
+           typeof [ih][k+1]!="undefined")
+        {
+            if([ih][k].PClosing>0 &&
+               [ih][k+1].PClosing>0)
+            {
+                valid10++;
+
+                if([ih][k].PClosing>=
+                   [ih][k+1].PClosing)
+                {
+                    positive10++;
+                }
+            }
+        }
+    }
+
+
+    if(valid10<8)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 11. RECENT EXTREME DAMAGE FILTER
+    // ------------------------------------------------------------
+
+    var severeDrop=0;
+
+
+    for(var m=0;m<10;m++)
+    {
+        if(typeof [ih][m]!="undefined")
+        {
+            if([ih][m].PClosing>0 &&
+               [ih][m].PriceYesterday>0)
+            {
+                if(
+                    [ih][m].PClosing/
+                    [ih][m].PriceYesterday
+                    <0.94
+                )
+                {
+                    severeDrop++;
+                }
+            }
+        }
+    }
+
+
+    if(severeDrop>=3)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 12. RECENT 10-DAY PRICE LOCATION
+    // ------------------------------------------------------------
+
+    var max10=0;
+    var min10=999999999999999;
+    var rangeCount=0;
+
+
+    for(var n=0;n<10;n++)
+    {
+        if(typeof [ih][n]!="undefined")
+        {
+            if([ih][n].PriceMax>0 &&
+               [ih][n].PriceMin>0)
+            {
+                rangeCount++;
+
+                if([ih][n].PriceMax>max10)
+                    max10=[ih][n].PriceMax;
+
+                if([ih][n].PriceMin<min10)
+                    min10=[ih][n].PriceMin;
+            }
+        }
+    }
+
+
+    if(rangeCount<8)
+        return false;
+
+    if(max10<=min10)
+        return false;
+
+
+    var position10=
+        (pl-min10)/(max10-min10);
+
+
+    if(position10<0.40)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 13. ANTI-CHASE FILTER
+    // ------------------------------------------------------------
+
+    var avgClose5=0;
+    var cc=0;
+
+
+    for(var p=0;p<5;p++)
+    {
+        if(typeof [ih][p]!="undefined" &&
+           [ih][p].PClosing>0)
+        {
+            avgClose5 += [ih][p].PClosing;
+            cc++;
+        }
+    }
+
+
+    if(cc<5)
+        return false;
+
+
+    avgClose5=avgClose5/cc;
+
+
+    /*
+       سهمی که از ساختار اخیر بیش از حد فاصله گرفته
+       نباید صرفاً به دلیل مومنتوم تعقیب شود.
+    */
+
+    if(pl>avgClose5*1.15)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 14. CFS SCORE
+    // ------------------------------------------------------------
+
+    var score=0;
+
+
+    // Liquidity
+    if([is40]>=90)
+        score+=15;
+    else if([is40]>=80)
+        score+=12;
+    else
+        score+=8;
+
+
+    // Buyer Power
+    if(buyerPower>=3.50)
+        score+=25;
+    else if(buyerPower>=2.80)
+        score+=22;
+    else if(buyerPower>=2.20)
+        score+=19;
+    else if(buyerPower>=1.80)
+        score+=15;
+    else
+        score+=10;
+
+
+    // Real Flow
+    if(realFlowRatio>=0.25)
+        score+=20;
+    else if(realFlowRatio>=0.15)
+        score+=17;
+    else if(realFlowRatio>=0.08)
+        score+=14;
+    else if(realFlowRatio>=0.03)
+        score+=9;
+
+
+    // Book
+    if(bookRatio>=1.50)
+        score+=15;
+    else if(bookRatio>=1.00)
+        score+=12;
+    else if(bookRatio>=0.70)
+        score+=9;
+    else
+        score+=5;
+
+
+    // Current Position
+    if(dayPosition>=0.90)
+        score+=15;
+    else if(dayPosition>=0.80)
+        score+=13;
+    else if(dayPosition>=0.70)
+        score+=10;
+    else
+        score+=7;
+
+
+    // Reclaim proximity
+    if(highDistance<=0.05)
+        score+=15;
+    else if(highDistance<=0.12)
+        score+=12;
+    else if(highDistance<=0.20)
+        score+=9;
+    else
+        score+=5;
+
+
+    // 5-day resilience
+    if(positive5>=4)
+        score+=15;
+    else if(positive5>=3)
+        score+=11;
+    else
+        score+=5;
+
+
+    if(strongClose5>=4)
+        score+=15;
+    else if(strongClose5>=3)
+        score+=10;
+    else
+        score+=4;
+
+
+    // 10-day structure
+    if(positive10>=6)
+        score+=15;
+    else if(positive10>=5)
+        score+=12;
+    else if(positive10>=4)
+        score+=8;
+    else
+        score+=4;
+
+
+    // Activity
+    if(volumeRatio>=1.50)
+        score+=10;
+    else if(volumeRatio>=0.75)
+        score+=7;
+    else
+        score+=4;
+
+
+    if(transactionRatio>=1.50)
+        score+=10;
+    else if(transactionRatio>=0.75)
+        score+=7;
+    else
+        score+=4;
+
+
+    // ------------------------------------------------------------
+    // 15. AGGRESSIVE MOMENTUM BONUS
+    // ------------------------------------------------------------
+
+    /*
+       این بخش همان چیزی است که QBR را
+       به CFS وارد می‌کند.
+    */
+
+    if(buyerPower>=2.50 &&
+       realFlowRatio>=0.10 &&
+       dayPosition>=0.80)
+    {
+        score+=20;
+    }
+
+
+    if(bookRatio>=1.00 &&
+       highDistance<=0.12 &&
+       volumeRatio>=0.75)
+    {
+        score+=15;
+    }
+
+
+    // ------------------------------------------------------------
+    // 16. EXHAUSTION PENALTY
+    // ------------------------------------------------------------
+
+    var penalty=0;
+
+
+    if(dayPosition>=0.98)
+        penalty+=10;
+
+
+    if(highDistance<=0.015)
+        penalty+=8;
+
+
+    if(volumeRatio>=2.50 &&
+       buyerPower<2.00)
+    {
+        penalty+=20;
+    }
+
+
+    if(realFlowRatio<0)
+        penalty+=10;
+
+
+    score-=penalty;
+
+
+    // ------------------------------------------------------------
+    // 17. HARD SAFETY GATES
+    // ------------------------------------------------------------
+
+    if(buyerPower<1.55)
+        return false;
+
+    if(realFlowRatio<-0.02)
+        return false;
+
+    if(bookRatio<0.45)
+        return false;
+
+    if(position10<0.40)
+        return false;
+
+    if(positive5<2)
+        return false;
+
+    if(strongClose5<2)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 18. FINAL CONFLUENCE
+    // ------------------------------------------------------------
+
+    /*
+       CFS باید حداقل یکی از دو موتور اصلی را
+       به صورت قدرتمند فعال کند:
+
+       RRE-side:
+       ساختار + تاب آوری
+
+       QBR-side:
+       مومنتوم + reclaim + order flow
+    */
+
+
+    var rreSide=0;
+
+    if([is40]>=80)
+        rreSide++;
+
+    if(positive5>=3)
+        rreSide++;
+
+    if(strongClose5>=3)
+        rreSide++;
+
+    if(positive10>=4)
+        rreSide++;
+
+    if(position10>=0.50)
+        rreSide++;
+
+
+    var qbrSide=0;
+
+    if(buyerPower>=2.20)
+        qbrSide++;
+
+    if(realFlowRatio>=0.08)
+        qbrSide++;
+
+    if(dayPosition>=0.80)
+        qbrSide++;
+
+    if(highDistance<=0.15)
+        qbrSide++;
+
+    if(bookRatio>=0.75)
+        qbrSide++;
+
+    if(volumeRatio>=0.75)
+        qbrSide++;
+
+
+    // حداقل یکی از دو موتور باید واقعاً فعال باشد
+    if(rreSide<3 && qbrSide<4)
+        return false;
+
+
+    // ------------------------------------------------------------
+    // 19. FINAL SCORE
+    // ------------------------------------------------------------
+
+    if(score<155)
+        return false;
+
+
+    return true;
+
+}()
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+```
+
+---
+
+# CFS چه چیزی را جدیداً اضافه می‌کند؟
+
+این بخش مهم است.
+
+CFS نمی‌گوید:
+
+> «RRE درست بود، پس خرید.»
+
+و نمی‌گوید:
+
+> «QBR درست بود، پس خرید.»
+
+بلکه دنبال **همگرایی** است.
+
+مثلاً:
+
+### حالت A — سهم ساختاری قوی
+
+```text
+RRE ↑↑↑
+QBR ↑
+```
+
+ممکن است خروجی بگیریم.
+
+اما سیگنال تهاجمی نیست.
+
+---
+
+### حالت B — حرکت لحظه‌ای بسیار قوی
+
+```text
+RRE ↑
+QBR ↑↑↑
+```
+
+این هم می‌تواند خروجی بدهد.
+
+اما اینجا بیشتر یک **فرصت معاملاتی** داریم.
+
+---
+
+### حالت C — چیزی که واقعاً دنبالش هستیم
+
+```text
+RRE ↑↑↑
+QBR ↑↑↑
+```
+
+این بهترین وضعیت CFS است.
+
+یعنی:
+
+> سهم از قبل خراب و بی‌کیفیت نیست + اکنون نیز تقاضای فعال دارد.
+
+این همان چیزی است که از یک **Confluence Engine** انتظار دارم.
+
+---
+
+# تفاوت سه موتور را در یک نگاه
+
+| موتور   | سؤال اصلی                                               |
+| ------- | ------------------------------------------------------- |
+| **RRE** | آیا سهم سالم و مقاوم است؟                               |
+| **QBR** | آیا الان حرکت تهاجمی در حال شکل‌گیری است؟               |
+| **CFS** | آیا سلامت ساختاری و قدرت لحظه‌ای هم‌زمان تأیید می‌شوند؟ |
+
+و بنابراین:
+
+**RRE = Quality**
+
+**QBR = Opportunity**
+
+**CFS = Confluence**
+
+---
+
+# اما یک تصمیم مهم برای ادامه پروژه
+
+من اینجا **فیلتر جدید دیگری پیشنهاد نمی‌کنم.**
+
+جدی می‌گویم.
+
+ما الان دیگر یک مجموعه کوچک نداریم؛ یک معماری داریم:
+
+### آفلاین
+
+* Accumulation / جمع‌آوری
+* فیلترهای ساختاری و تاریخی
+* Resilience
+
+### آنلاین
+
+* Live Momentum Transition
+* Queue/Buy-Sell Battle
+* QBR
+* RRE
+* **CFS**
+
+اگر همین حالا یک «ابر فیلتر» دیگر اضافه کنیم، بیشتر احتمال دارد میز کار را شلوغ کنیم تا اینکه کیفیت تصمیم را بالا ببریم.
+
+## پیشنهاد من برای مرحله بعد
+
+**فعلاً فیلتر جدید نسازیم.**
+
+بهتر است وارد مرحله‌ای شویم که از نظر من ارزش بسیار بیشتری دارد:
+
+### **Backtest / Calibration / Ranking**
+
+یعنی خروجی فیلترها را بررسی کنیم و بفهمیم:
+
+* کدام فیلتر بیشترین سیگنال مفید می‌دهد؟
+* کدام فیلتر بیشترین false positive دارد؟
+* کدام شرط بیش از حد سخت‌گیر است؟
+* کدام شرط واقعاً ارزش افزوده دارد؟
+* چه ترکیبی بیشترین نسبت موفقیت به تعداد سیگنال دارد؟
+* RRE بهتر است یا QBR؟
+* CFS واقعاً بهتر از هرکدام به تنهایی است یا فقط خروجی را کم می‌کند؟
+* چند دقیقه/درصد بعد از سیگنال معمولاً حرکت اتفاق می‌افتد؟
+* بعد از سیگنال، حداکثر افت نامطلوب چقدر بوده؟
+* حداکثر رشد قابل دستیابی چقدر بوده؟
+
+**این مرحله از ساختن فیلتر شماره ۱۲ مهم‌تر است.**
+
+اگر بخواهم از موضع قاطع تصمیم بگیرم، انتخاب من همین است:
+
+> **فعلاً فیلتر جدید نسازیم؛ همین مجموعه را آزمایش و کالیبره کنیم.**
+
+مگر اینکه ایده‌ای که بعداً مطرح می‌کنی یک شکاف واقعی در این معماری را پوشش دهد. آن وقت ساخت فیلتر جدید کاملاً توجیه دارد.
